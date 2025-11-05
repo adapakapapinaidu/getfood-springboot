@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -21,38 +20,18 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             border-radius: 15px;
             margin-top: 50px;
-            animation: fadeIn 1s ease-in-out;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        h1 { color: #444; }
-        input, textarea {
+        input, textarea, button {
             width: 100%;
             padding: 12px;
             margin: 10px 0;
-            border: none;
             border-radius: 8px;
-            background: #f5f5f5;
-        }
-        button {
-            width: 100%;
-            padding: 12px;
             border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: 0.3s;
         }
-        .submit-btn { background: #28a745; color: white; }
+        .submit-btn { background: #28a745; color: white; cursor: pointer; }
         .submit-btn:hover { background: #218838; }
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 15px;
-        }
-        .home-btn, .receive-btn { background: #007bff; color: white; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 15px; }
+        .home-btn, .receive-btn { background: #007bff; color: white; cursor: pointer; }
         .home-btn:hover, .receive-btn:hover { background: #0056b3; }
     </style>
 </head>
@@ -65,54 +44,42 @@
         <input type="text" id="pickupLocation" placeholder="Pickup Location">
         <button class="submit-btn" onclick="postFood()">Submit</button>
 
-```
-    <div class="nav-buttons">
-        <button class="home-btn" onclick="goHome()">Home</button>
-        <button class="receive-btn" onclick="goReceive()">Receive</button>
+        <div class="nav-buttons">
+            <button class="home-btn" onclick="goHome()">Home</button>
+            <button class="receive-btn" onclick="goReceive()">Receive</button>
+        </div>
     </div>
-</div>
 
-<script>
-    // Determine backend URL: localhost for local, Render for deployed
-    const BASE_URL = window.location.hostname === "localhost" 
-        ? "http://localhost:8080" 
-        : "https://getfood-springboot-8.onrender.com";
+    <script>
+        const baseUrl = ""; // empty means same domain, works on Render
 
-    async function postFood() {
-        const senderName = document.getElementById("senderName").value.trim();
-        const foodName = document.getElementById("foodName").value.trim();
-        const description = document.getElementById("description").value.trim();
-        const pickupLocation = document.getElementById("pickupLocation").value.trim();
+        async function postFood() {
+            const senderName = document.getElementById("senderName").value;
+            const foodName = document.getElementById("foodName").value;
+            const description = document.getElementById("description").value;
+            const pickupLocation = document.getElementById("pickupLocation").value;
 
-        if (!senderName || !foodName || !pickupLocation) {
-            alert("Please fill in all required fields!");
-            return;
-        }
+            try {
+                const response = await fetch(`${baseUrl}/food/post`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ senderName, foodName, description, pickupLocation })
+                });
 
-        try {
-            const response = await fetch(`${BASE_URL}/food/post`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ senderName, foodName, description, pickupLocation })
-            });
-
-            if (response.ok) {
-                alert("Food posted successfully!");
-                window.location.href = "index.html";
-            } else {
-                const text = await response.text();
-                alert("Error posting food: " + text);
+                if (response.ok) {
+                    alert("Food posted successfully!");
+                    window.location.href = "index.html";
+                } else {
+                    const err = await response.text();
+                    alert("Error posting food: " + err);
+                }
+            } catch (error) {
+                alert("Error: " + error.message);
             }
-        } catch (error) {
-            console.error(error);
-            alert("Failed to connect. Ensure the backend is running and the URL is correct.");
         }
-    }
 
-    function goHome() { window.location.href = "index.html"; }
-    function goReceive() { window.location.href = "receive.html"; }
-</script>
-```
-
+        function goHome() { window.location.href = "index.html"; }
+        function goReceive() { window.location.href = "receiver.html"; }
+    </script>
 </body>
 </html>
