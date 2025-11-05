@@ -1,0 +1,6 @@
+project\getfood\controller\FoodPostController.class
+project\getfood\config\SecurityConfig.class
+project\getfood\repository\FoodPostRepository.class
+project\getfood\model\User.class
+project\getfood\GetfoodApplication.class
+project\getfood\model\FoodPost.class
