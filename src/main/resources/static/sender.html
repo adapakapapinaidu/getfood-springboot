@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -26,9 +27,7 @@
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        h1 {
-            color: #444;
-        }
+        h1 { color: #444; }
         input, textarea {
             width: 100%;
             padding: 12px;
@@ -46,25 +45,15 @@
             font-size: 16px;
             transition: 0.3s;
         }
-        .submit-btn {
-            background: #28a745;
-            color: white;
-        }
-        .submit-btn:hover {
-            background: #218838;
-        }
+        .submit-btn { background: #28a745; color: white; }
+        .submit-btn:hover { background: #218838; }
         .nav-buttons {
             display: flex;
             justify-content: space-between;
             margin-top: 15px;
         }
-        .home-btn, .receive-btn {
-            background: #007bff;
-            color: white;
-        }
-        .home-btn:hover, .receive-btn:hover {
-            background: #0056b3;
-        }
+        .home-btn, .receive-btn { background: #007bff; color: white; }
+        .home-btn:hover, .receive-btn:hover { background: #0056b3; }
     </style>
 </head>
 <body>
@@ -75,21 +64,33 @@
         <textarea id="description" placeholder="Description"></textarea>
         <input type="text" id="pickupLocation" placeholder="Pickup Location">
         <button class="submit-btn" onclick="postFood()">Submit</button>
-        
-        <div class="nav-buttons">
-            <button class="home-btn" onclick="goHome()">Home</button>
-            <button class="receive-btn" onclick="goReceive()">Receive</button>
-        </div>
+
+```
+    <div class="nav-buttons">
+        <button class="home-btn" onclick="goHome()">Home</button>
+        <button class="receive-btn" onclick="goReceive()">Receive</button>
     </div>
+</div>
 
-    <script>
-        async function postFood() {
-            let senderName = document.getElementById("senderName").value;
-            let foodName = document.getElementById("foodName").value;
-            let description = document.getElementById("description").value;
-            let pickupLocation = document.getElementById("pickupLocation").value;
+<script>
+    // Determine backend URL: localhost for local, Render for deployed
+    const BASE_URL = window.location.hostname === "localhost" 
+        ? "http://localhost:8080" 
+        : "https://getfood-springboot-8.onrender.com";
 
-            let response = await fetch('http://localhost:8080/food/post', {
+    async function postFood() {
+        const senderName = document.getElementById("senderName").value.trim();
+        const foodName = document.getElementById("foodName").value.trim();
+        const description = document.getElementById("description").value.trim();
+        const pickupLocation = document.getElementById("pickupLocation").value.trim();
+
+        if (!senderName || !foodName || !pickupLocation) {
+            alert("Please fill in all required fields!");
+            return;
+        }
+
+        try {
+            const response = await fetch(`${BASE_URL}/food/post`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ senderName, foodName, description, pickupLocation })
@@ -97,18 +98,21 @@
 
             if (response.ok) {
                 alert("Food posted successfully!");
-                window.location.href = "index.html"; // Redirect to home page
+                window.location.href = "index.html";
             } else {
-                alert("Error posting food.");
+                const text = await response.text();
+                alert("Error posting food: " + text);
             }
+        } catch (error) {
+            console.error(error);
+            alert("Failed to connect. Ensure the backend is running and the URL is correct.");
         }
+    }
 
-        function goHome() {
-            window.location.href = "index.html";
-        }
-        function goReceive() {
-            window.location.href = "receive.html";
-        }
-    </script>
+    function goHome() { window.location.href = "index.html"; }
+    function goReceive() { window.location.href = "receive.html"; }
+</script>
+```
+
 </body>
 </html>
