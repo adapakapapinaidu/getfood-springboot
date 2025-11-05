@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: getfood-springboot
+    repo: adapakapapinaidu/getfood-springboot
+    branch: main
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: free
+    envVars:
+      - key: DB_URL
+        value: jdbc:mysql://<host>:3306/footwaste_db
+      - key: DB_USERNAME
+        value: root
+      - key: DB_PASSWORD
+        value: Naidu@404
