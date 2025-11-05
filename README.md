@@ -55,7 +55,9 @@ getfood/
 ## Screenshots / Images
 
 ![Image 1](images/1.png)  
-![Image 2](images/2.png)  
+SENDER
+![Image 2](images/2.png)
+RECEIVER
 ![Image 3](images/3.png)
 
 ## 🧩 Example Endpoint
