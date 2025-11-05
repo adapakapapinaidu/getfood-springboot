@@ -52,6 +52,11 @@ getfood/
    The app will start on **[http://localhost:8080](http://localhost:8080)**
 
 ---
+## Screenshots / Images
+
+![Image 1](images/1.png)  
+![Image 2](images/2.png)  
+![Image 3](images/3.png)
 
 ## 🧩 Example Endpoint
 
